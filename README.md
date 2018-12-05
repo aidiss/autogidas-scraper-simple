@@ -17,12 +17,9 @@ Future fields:
 
 ## Instalation
 
-Dependencies:
+`pip install -r requirements.txt`
 
-- requests
-- bs4
-
-## How to us it
+## Usage
 
 Make sure you are using Python3.
 
