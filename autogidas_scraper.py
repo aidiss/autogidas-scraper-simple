@@ -1,21 +1,37 @@
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
+from argparse import ArgumentParser
+import logging
 
-def scrape_autogidas(kiek_pusl):
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+
+logger.warning('test warning')
+
+
+def scrape_autogidas(kiek_pusl, brand):
     visos_kainos = []
-    for i in range(kiek_pusl):
+    for i in range(1, kiek_pusl):
         sleep(1)
-        url = 'https://www.autogidas.lt/skelbimai/automobiliai/?f_1=Audi&f_50=kaina_asc&page=%s' % i
+        url = 'https://autogidas.lt/skelbimai/automobiliai/?f_1=%s&f_50=kaina_asc&page=%s' % (brand, i)
+        # url1 = 'https://autogidas.lt/skelbimai/automobiliai/?f_1=Audi&f_50=kaina_asc&page=1'
+        logger.warning(url)
         r = requests.get(url)
+        logger.warning(len(r.text))
+        issaugoti_puslapio_kopija(i, r.text)
         kainos = gauk_visas_kainas(r)
         visos_kainos += str(kainos)
 
     issaugoti_informacija_i_txt_faila(visos_kainos)
     
+def issaugoti_puslapio_kopija(i, html_page):
+    with open(str(i) + '.html', 'w') as f:
+        f.write(html_page)
+
 def issaugoti_informacija_i_txt_faila(visos_kainos):
     with open('kainos.txt', 'a') as f:
-        f.write(visos_kainos + '\n')
+        f.write(str(visos_kainos) + '\n')
 
 def gauk_visas_kainas(r:requests.Response):
     """Gauna visas kainas is requests response"""
@@ -38,6 +54,10 @@ def apdorok_kainos_elementa(item_price_element:BeautifulSoup):
     
 
 if __name__ == '__main__':
+    parser = ArgumentParser()
+    parser.add_argument('brand')
+    arguments = parser.parse_args()
+    print(arguments)
     while True:
-        scrape_autogidas(5)
+        scrape_autogidas(5,brand=arguments.brand)
         sleep(60 * 60 * 24)
