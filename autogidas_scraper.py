@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from time import sleep
 
+
 def gauk_visas_kainas(r):
     soup = BeautifulSoup(r.text, 'lxml')
     kainos = []
@@ -20,7 +21,6 @@ def scrape_autogidas(kiek_pusl):
     for i in range(kiek_pusl):
         sleep(1)
         url = 'https://www.autogidas.lt/skelbimai/automobiliai/?f_1=Audi&f_50=kaina_asc&page=%s' % i
-        p
         r = requests.get(url)
         kainos = gauk_visas_kainas(r)
         visos_kainos += kainos
@@ -28,18 +28,8 @@ def scrape_autogidas(kiek_pusl):
     with open('kainos.txt', 'a') as f:
         f.write(str(visos_kainos) + '\n')
 
+
 if __name__ == '__main__':
     while True:
         scrape_autogidas(5)
         sleep(60 * 60 * 24)
-
-
-
-
-
-
-
-
-
-
-
