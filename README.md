@@ -40,7 +40,7 @@ You can also use it as a simple module.
 
 ```py
 from autogidas_scraper import Scraper
-Scrape('bmw')
+Scraper.scrape('bmw')
 ```
 
 #### Parser
